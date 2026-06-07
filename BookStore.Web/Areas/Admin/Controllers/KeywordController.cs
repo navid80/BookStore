@@ -5,20 +5,21 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookStore.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoriesController : Controller
+    public class KeywordController : Controller
     {
-        private readonly ICategoryService _categoryService;
+        private readonly IKeywordService _keywordService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public KeywordController(IKeywordService keywordService)
         {
-            _categoryService = categoryService;
+            _keywordService = keywordService;
         }
+
 
         public async Task<IActionResult> Index()
         {
-            var categories = await _categoryService.GetAllAsync();
+            var keywords = await _keywordService.GetAllAsync();
 
-            return View(categories);
+            return View(keywords);
         }
 
         public IActionResult Create()
@@ -28,48 +29,47 @@ namespace BookStore.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateCategoryDto dto)
+        public async Task<IActionResult> Create(CreateKeywordDto dto)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
                 return View(dto);
 
-            await _categoryService.CreateAsync(dto);
+            await _keywordService.CreateAsync(dto);
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Update(int id)
         {
-            var category = await _categoryService.GetByIdAsync(id);
+            var keyword = await _keywordService.GetByIdAsync(id);
 
-            if(category is null)
+            if (keyword is null)
                 return NotFound();
 
-            var editingCategory = new UpdateCategoryDto
+            var editingKeyword = new UpdateKeywordDto
             {
-                Id = category.Id,
-                Name = category.Name,
-                Slug = category.Slug
+                Id = keyword.Id,
+                Word = keyword.Word
             };
 
-            return View(editingCategory);
+            return View(editingKeyword);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(UpdateCategoryDto dto)
+        public async Task<IActionResult> Update(UpdateKeywordDto dto)
         {
             if (!ModelState.IsValid)
                 return View(dto);
 
-            await _categoryService.UpdateAsync(dto);
+            await _keywordService.UpdateAsync(dto);
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            await _categoryService.DeleteAsync(id);
+            await _keywordService.DeleteAsync(id);
 
             return RedirectToAction(nameof(Index));
         }

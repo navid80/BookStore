@@ -1,4 +1,5 @@
-﻿using BookStore.Application.DTOs;
+﻿using BookStore.Application.Common.Helpers;
+using BookStore.Application.DTOs;
 using BookStore.Application.Interfaces;
 using BookStore.Domain.Entities;
 using BookStore.Infrastructure.Persistence.Context;
@@ -20,7 +21,7 @@ namespace BookStore.Infrastructure.Services
             var category = new Category
             {
                 Name = dto.Name,
-                Slug = GenerateSlug(dto.Slug)
+                Slug = SlugHelper.GenerateSlug(dto.Slug)
             };
 
             _dbContext.Categories.Add(category);
@@ -80,17 +81,9 @@ namespace BookStore.Infrastructure.Services
                 return;
 
             category.Name = dto.Name;
-            category.Slug = GenerateSlug(dto.Slug);
+            category.Slug = SlugHelper.GenerateSlug(dto.Slug);
 
             await _dbContext.SaveChangesAsync();
-        }
-
-        private static string GenerateSlug(string value)
-        {
-            return value
-                .Trim()
-                .ToLower()
-                .Replace(" ", "-");
         }
     }
 }
