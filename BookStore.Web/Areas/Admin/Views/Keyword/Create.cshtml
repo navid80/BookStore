@@ -1,0 +1,32 @@
+@model BookStore.Application.DTOs.CreateKeywordDto
+
+@{
+    ViewData["Title"] = "افزودن کلیدواژه";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h4 class="mb-0">🏷️ افزودن کلیدواژه جدید</h4>
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">← بازگشت به لیست</a>
+</div>
+
+<div class="table-card" style="max-width:500px">
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-4">
+            <label asp-for="Word" class="form-label fw-semibold">کلیدواژه</label>
+            <input asp-for="Word" class="form-control" placeholder="مثال: ادبیات کلاسیک" />
+            <span asp-validation-for="Word" class="text-danger small"></span>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">ذخیره</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">انصراف</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

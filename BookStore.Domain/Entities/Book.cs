@@ -61,12 +61,12 @@ namespace BookStore.Domain.Entities
 
         public Category Category { get; set; } = null!;
 
-        public ICollection<BookKeyword> BookKeywords { get; set; }
-            = new List<BookKeyword>();
+        public ICollection<BookKeyword> BookKeywords { get; set; } = new List<BookKeyword>();
 
-        public ICollection<BookAuthor> BookAuthors { get; set; }
+        public ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
+            
+        public ICollection<BookRelation> RelatedTo { get; set; } = new List<BookRelation>();
 
-        public ICollection<BookRelation> RelatedTo { get; set; }
-        public ICollection<BookRelation> RelatedFrom { get; set; }
+        public ICollection<BookRelation> RelatedFrom { get; set; } = new List<BookRelation>();
     }
 }

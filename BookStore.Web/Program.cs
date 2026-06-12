@@ -8,6 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IKeywordService, KeywordService>();
+builder.Services.AddScoped<IBookService>(sp =>
+{
+    var db = sp.GetRequiredService<BookStore.Infrastructure.Persistence.Context.AppDbContext>();
+    var env = sp.GetRequiredService<IWebHostEnvironment>();
+    return new BookService(db, env.WebRootPath);
+});
 
 var app = builder.Build();
 
@@ -25,6 +33,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

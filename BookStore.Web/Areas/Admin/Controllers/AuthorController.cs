@@ -14,7 +14,7 @@ namespace BookStore.Web.Areas.Admin.Controllers
             _authorService = authorService;
         }
 
-        public async IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var authors = await _authorService.GetAllAsync();
 

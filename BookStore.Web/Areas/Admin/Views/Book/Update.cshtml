@@ -1,0 +1,167 @@
+@model BookStore.Application.DTOs.UpdateBookDto
+
+@{
+    ViewData["Title"] = "ویرایش کتاب";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
+    var authors = ViewBag.Authors as IEnumerable<BookStore.Application.DTOs.AuthorDetailsDto>;
+    var keywords = ViewBag.Keywords as IEnumerable<BookStore.Application.DTOs.KeywordDetailsDto>;
+    var allBooks = ViewBag.AllBooks as IEnumerable<BookStore.Application.DTOs.BookListItemDto>;
+    var selectedAuthorIds = ViewBag.SelectedAuthorIds as List<int> ?? new List<int>();
+    var selectedKeywordIds = ViewBag.SelectedKeywordIds as List<int> ?? new List<int>();
+    var selectedRelatedIds = ViewBag.SelectedRelatedBookIds as List<int> ?? new List<int>();
+}
+
+<div class="page-header">
+    <h4 class="mb-0">✏️ ویرایش کتاب</h4>
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">← بازگشت به لیست</a>
+</div>
+
+<form asp-action="Update" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="CurrentFilePath" type="hidden" />
+    <input asp-for="CurrentCoverImagePath" type="hidden" />
+
+    <div class="row g-4">
+        <div class="col-md-8">
+            <div class="table-card">
+                <h6 class="fw-bold mb-3 text-muted">اطلاعات اصلی</h6>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label asp-for="Title" class="form-label fw-semibold">عنوان کتاب</label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Slug" class="form-label fw-semibold">Slug</label>
+                        <input asp-for="Slug" class="form-control" dir="ltr" />
+                        <span asp-validation-for="Slug" class="text-danger small"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Description" class="form-label fw-semibold">توضیحات</label>
+                        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="CategoryId" class="form-label fw-semibold">دسته‌بندی</label>
+                        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
+                            <option value="">انتخاب کنید...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="PublishedYear" class="form-label fw-semibold">سال انتشار</label>
+                        <input asp-for="PublishedYear" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="PageCount" class="form-label fw-semibold">تعداد صفحات</label>
+                        <input asp-for="PageCount" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ISBN" class="form-label fw-semibold">ISBN</label>
+                        <input asp-for="ISBN" class="form-control" dir="ltr" />
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <div class="form-check mb-2">
+                            <input asp-for="IsFree" class="form-check-input" type="checkbox" />
+                            <label asp-for="IsFree" class="form-check-label">رایگان</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <div class="form-check mb-2">
+                            <input asp-for="IsPublished" class="form-check-input" type="checkbox" />
+                            <label asp-for="IsPublished" class="form-check-label">منتشر شده</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-card mt-4">
+                <h6 class="fw-bold mb-3 text-muted">فایل‌ها</h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="PdfFile" class="form-label fw-semibold">فایل PDF جدید</label>
+                        <input asp-for="PdfFile" type="file" class="form-control" accept=".pdf" />
+                        @if (!string.IsNullOrEmpty(Model.CurrentFilePath))
+                        {
+                            <div class="form-text text-success">
+                                ✓ فایل فعلی: @System.IO.Path.GetFileName(Model.CurrentFilePath)
+                                (اگر فایل جدید انتخاب نکنید، فایل قبلی حفظ می‌شود)
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="CoverImage" class="form-label fw-semibold">تصویر جلد جدید</label>
+                        <input asp-for="CoverImage" type="file" class="form-control"
+                               accept=".jpg,.jpeg,.png,.webp" />
+                        @if (!string.IsNullOrEmpty(Model.CurrentCoverImagePath))
+                        {
+                            <div class="mt-2">
+                                <img src="@Model.CurrentCoverImagePath" alt="جلد فعلی"
+                                     style="height:80px; border-radius:4px; border:1px solid #dee2e6;" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="table-card">
+                <h6 class="fw-bold mb-3 text-muted">نویسندگان</h6>
+                <div style="max-height:200px; overflow-y:auto;">
+                    @foreach (var author in authors ?? Enumerable.Empty<BookStore.Application.DTOs.AuthorDetailsDto>())
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   name="AuthorIds" value="@author.Id"
+                                   id="author_@author.Id"
+                                   @(selectedAuthorIds.Contains(author.Id) ? "checked" : "") />
+                            <label class="form-check-label" for="author_@author.Id">@author.FullName</label>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="table-card mt-3">
+                <h6 class="fw-bold mb-3 text-muted">کلیدواژه‌ها</h6>
+                <div style="max-height:160px; overflow-y:auto;">
+                    @foreach (var keyword in keywords ?? Enumerable.Empty<BookStore.Application.DTOs.KeywordDetailsDto>())
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   name="KeywordIds" value="@keyword.Id"
+                                   id="keyword_@keyword.Id"
+                                   @(selectedKeywordIds.Contains(keyword.Id) ? "checked" : "") />
+                            <label class="form-check-label" for="keyword_@keyword.Id">@keyword.Word</label>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="table-card mt-3">
+                <h6 class="fw-bold mb-3 text-muted">کتاب‌های مرتبط</h6>
+                <div style="max-height:160px; overflow-y:auto;">
+                    @foreach (var book in (allBooks ?? Enumerable.Empty<BookStore.Application.DTOs.BookListItemDto>()).Where(b => b.Id != Model.Id))
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   name="RelatedBookIds" value="@book.Id"
+                                   id="related_@book.Id"
+                                   @(selectedRelatedIds.Contains(book.Id) ? "checked" : "") />
+                            <label class="form-check-label small" for="related_@book.Id">@book.Title</label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-primary px-4">ذخیره تغییرات</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">انصراف</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

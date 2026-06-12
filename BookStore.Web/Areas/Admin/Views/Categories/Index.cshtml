@@ -1,0 +1,62 @@
+@model IEnumerable<BookStore.Application.DTOs.CategoryDetailsDto>
+
+@{
+    ViewData["Title"] = "دسته‌بندی‌ها";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h4 class="mb-0">🗂️ مدیریت دسته‌بندی‌ها</h4>
+    <a asp-action="Create" class="btn btn-primary btn-sm">
+        + افزودن دسته‌بندی جدید
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="table-card">
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5 text-muted">
+            <div style="font-size:3rem">🗂️</div>
+            <p class="mt-2">هیچ دسته‌بندی‌ای ثبت نشده است.</p>
+            <a asp-action="Create" class="btn btn-outline-primary btn-sm">اولین دسته‌بندی را اضافه کنید</a>
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width:60px">#</th>
+                    <th>نام دسته‌بندی</th>
+                    <th>Slug</th>
+                    <th style="width:130px" class="text-end">عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-muted">@item.Id</td>
+                        <td><strong>@item.Name</strong></td>
+                        <td><span class="badge-slug">@item.Slug</span></td>
+                        <td class="text-end">
+                            <a asp-action="Update" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-outline-secondary me-1">ویرایش</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm('آیا از حذف این دسته‌بندی اطمینان دارید؟')">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

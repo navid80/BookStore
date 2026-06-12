@@ -1,0 +1,40 @@
+@model BookStore.Application.DTOs.UpdateAuthorDto
+
+@{
+    ViewData["Title"] = "ویرایش نویسنده";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h4 class="mb-0">✏️ ویرایش نویسنده</h4>
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">← بازگشت به لیست</a>
+</div>
+
+<div class="table-card" style="max-width:600px">
+    <form asp-action="Update" method="post">
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+
+        <div class="mb-3">
+            <label asp-for="FullName" class="form-label fw-semibold">نام کامل نویسنده</label>
+            <input asp-for="FullName" class="form-control" />
+            <span asp-validation-for="FullName" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Slug" class="form-label fw-semibold">Slug</label>
+            <input asp-for="Slug" class="form-control" dir="ltr" />
+            <div class="form-text">اسلاگ باید با حروف لاتین کوچک و خط تیره باشد.</div>
+            <span asp-validation-for="Slug" class="text-danger small"></span>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">انصراف</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
