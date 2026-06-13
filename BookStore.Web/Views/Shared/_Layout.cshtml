@@ -1,49 +1,284 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BookStore.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BookStore.Web.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - کتابخانه دیجیتال</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+    <style>
+        :root {
+            --primary: #2c5f8a;
+            --primary-light: #3a7abf;
+            --accent: #e8a020;
+            --bg: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-muted: #6c757d;
+            --border: #e2e8f0;
+        }
+
+        html, body {
+          height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #2d3748;
+        }
+
+        .container {
+          flex: 1 0 auto;
+        }
+
+        /* ── Navbar ── */
+        .navbar-main {
+            background: var(--primary);
+            padding: 0.75rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+        }
+        .navbar-main .navbar-brand {
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        .navbar-main .nav-link {
+            color: rgba(255,255,255,.85) !important;
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            transition: background .2s;
+        }
+        .navbar-main .nav-link:hover {
+            background: rgba(255,255,255,.15);
+            color: #fff !important;
+        }
+        .navbar-main .search-form {
+            display: flex;
+            gap: 6px;
+        }
+        .navbar-main .search-form input {
+            width: 220px;
+            border-radius: 20px;
+            border: none;
+            padding: 0.35rem 1rem;
+            font-size: .9rem;
+        }
+        .navbar-main .search-form button {
+            border-radius: 20px;
+            padding: 0.35rem 1rem;
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            font-size: .9rem;
+        }
+
+        /* ── Footer ── */
+        footer {
+            background: #2d3748;
+            color: rgba(255,255,255,.7);
+            padding: 2rem 0 1rem;
+            margin-top: 4rem;
+            flex-shrink: 0;
+            width: 100%;
+            white-space: nowrap;
+            line-height: 60px;
+        }
+        footer a { color: rgba(255,255,255,.7); text-decoration: none; }
+        footer a:hover { color: #fff; }
+
+        /* ── Book Card ── */
+        .book-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: transform .2s, box-shadow .2s;
+            height: 100%;
+        }
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,.1);
+        }
+        .book-card .cover-wrap {
+            height: 200px;
+            background: linear-gradient(135deg, #e8eef5 0%, #d0dce8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .book-card .cover-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .book-card .cover-placeholder {
+            font-size: 3.5rem;
+            opacity: .4;
+        }
+        .book-card .card-body {
+            padding: 1rem;
+        }
+        .book-card .book-title {
+            font-weight: 700;
+            font-size: .95rem;
+            color: #2d3748;
+            margin-bottom: .3rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .book-card .book-author {
+            font-size: .82rem;
+            color: var(--text-muted);
+            margin-bottom: .5rem;
+        }
+        .book-card .book-meta {
+            font-size: .78rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: .5rem;
+            flex-wrap: wrap;
+            margin-bottom: .75rem;
+        }
+        .badge-free {
+            background: #d1fae5;
+            color: #065f46;
+            font-size: .72rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .badge-paid {
+            background: #fef3c7;
+            color: #92400e;
+            font-size: .72rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .badge-cat {
+            background: #eff6ff;
+            color: var(--primary);
+            font-size: .72rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        /* ── Sidebar ── */
+        .filter-sidebar {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+            position: sticky;
+            top: 1rem;
+        }
+        .filter-sidebar h6 {
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: .5rem;
+            margin-bottom: .75rem;
+        }
+        .filter-link {
+            display: block;
+            padding: .35rem .5rem;
+            border-radius: 6px;
+            color: #4a5568;
+            text-decoration: none;
+            font-size: .88rem;
+            transition: background .15s;
+        }
+        .filter-link:hover, .filter-link.active {
+            background: #eff6ff;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ── Pagination ── */
+        .pagination .page-link {
+            border-radius: 6px !important;
+            margin: 0 2px;
+            color: var(--primary);
+        }
+        .pagination .page-item.active .page-link {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* ── Section heading ── */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: var(--border);
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BookStore.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - BookStore.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<nav class="navbar navbar-main navbar-expand-md">
+    <div class="container">
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">📚 کتابخانه دیجیتال</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMain">
+            <ul class="navbar-nav ms-auto mb-2 mb-md-0 me-3">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Books" asp-action="Index">همه کتاب‌ها</a>
+                </li>
+            </ul>
+
+            <form class="search-form" asp-controller="Books" asp-action="Index" method="get">
+                <input type="text" name="SearchTerm" placeholder="جستجو در کتاب‌ها..."
+                       value="@(ViewBag.Filter?.SearchTerm)" />
+                <button type="submit">🔍</button>
+            </form>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </div>
+</nav>
+
+<div class="container mt-4">
+    @RenderBody()
+</div>
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <h6 class="text-white fw-bold">📚 کتابخانه دیجیتال</h6>
+                <p style="font-size:.85rem">دسترسی رایگان به صدها کتاب ارزشمند</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h6 class="text-white fw-bold">دسترسی سریع</h6>
+                <ul class="list-unstyled" style="font-size:.85rem">
+                    <li><a asp-controller="Books" asp-action="Index">همه کتاب‌ها</a></li>
+                    <li><a asp-area="Admin" asp-controller="Categories" asp-action="Index">پنل مدیریت</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr style="border-color:rgba(255,255,255,.15)">
+        <p class="text-center mb-0" style="font-size:.8rem">© ۱۴۰۴ — کتابخانه دیجیتال</p>
+    </div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

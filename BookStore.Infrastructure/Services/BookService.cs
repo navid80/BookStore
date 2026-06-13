@@ -177,5 +177,119 @@ namespace BookStore.Infrastructure.Services
 
             return $"/uploads/{folder}/{fileName}";
         }
+
+        public async Task<PagedResult<BookListItemDto>> GetFilteredAsync(BookFilterDto filter)
+        {
+            var query = _dbContext.Books
+                .Include(b => b.Category)
+                .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
+                .Include(b => b.BookKeywords).ThenInclude(bk => bk.Keyword)
+                .Where(b => b.IsPublished)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+            {
+                var term = filter.SearchTerm.Trim().ToLower();
+                query = query.Where(b =>
+                    b.Title.ToLower().Contains(term) ||
+                    (b.Description != null && b.Description.ToLower().Contains(term)) ||
+                    b.BookAuthors.Any(ba => ba.Author.FullName.ToLower().Contains(term)));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.CategorySlug))
+                query = query.Where(b => b.Category.Slug == filter.CategorySlug);
+
+            if (!string.IsNullOrWhiteSpace(filter.AuthorSlug))
+                query = query.Where(b => b.BookAuthors.Any(ba => ba.Author.Slug == filter.AuthorSlug));
+
+            if (!string.IsNullOrWhiteSpace(filter.KeywordWord))
+                query = query.Where(b => b.BookKeywords.Any(bk => bk.Keyword.Word == filter.KeywordWord));
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(b => b.CreatedAt)
+                .Skip((filter.Page - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .Select(b => new BookListItemDto
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Slug = b.Slug,
+                    CategoryName = b.Category.Name,
+                    CategorySlug = b.Category.Slug,
+                    PublishedYear = b.PublishedYear,
+                    PageCount = b.PageCount,
+                    IsFree = b.IsFree,
+                    CoverImagePath = b.CoverImagePath,
+                    AuthorNames = b.BookAuthors.Select(ba => ba.Author.FullName).ToList()
+                })
+                .ToListAsync();
+
+            return new PagedResult<BookListItemDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = filter.Page,
+                PageSize = filter.PageSize
+            };
+        }
+
+        public async Task<BookDetailsDto?> GetBySlugAsync(string slug)
+        {
+            var book = await _dbContext.Books
+                .Include(b => b.Category)
+                .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
+                .Include(b => b.BookKeywords).ThenInclude(bk => bk.Keyword)
+                .Include(b => b.RelatedTo).ThenInclude(br => br.RelatedBook)
+                    .ThenInclude(rb => rb.Category)
+                .Include(b => b.RelatedTo).ThenInclude(br => br.RelatedBook)
+                    .ThenInclude(rb => rb.BookAuthors).ThenInclude(ba => ba.Author)
+                .FirstOrDefaultAsync(b => b.Slug == slug && b.IsPublished);
+
+            if (book is null) return null;
+
+            return new BookDetailsDto
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Slug = book.Slug,
+                Description = book.Description,
+                FilePath = book.FilePath,
+                PageCount = book.PageCount,
+                ISBN = book.ISBN,
+                PublishedYear = book.PublishedYear,
+                CoverImagePath = book.CoverImagePath,
+                IsPublished = book.IsPublished,
+                IsFree = book.IsFree,
+                CategoryId = book.CategoryId,
+                CategoryName = book.Category.Name,
+                CategorySlug = book.Category.Slug,
+                Authors = book.BookAuthors.Select(ba => new AuthorDetailsDto
+                {
+                    Id = ba.Author.Id,
+                    FullName = ba.Author.FullName,
+                    Slug = ba.Author.Slug
+                }).ToList(),
+                Keywords = book.BookKeywords.Select(bk => new KeywordDetailsDto
+                {
+                    Id = bk.Keyword.Id,
+                    Word = bk.Keyword.Word
+                }).ToList(),
+                RelatedBooks = book.RelatedTo.Select(br => new BookListItemDto
+                {
+                    Id = br.RelatedBook.Id,
+                    Title = br.RelatedBook.Title,
+                    Slug = br.RelatedBook.Slug,
+                    CategoryName = br.RelatedBook.Category.Name,
+                    CategorySlug = br.RelatedBook.Category.Slug,
+                    PublishedYear = br.RelatedBook.PublishedYear,
+                    PageCount = br.RelatedBook.PageCount,
+                    IsFree = br.RelatedBook.IsFree,
+                    CoverImagePath = br.RelatedBook.CoverImagePath,
+                    AuthorNames = br.RelatedBook.BookAuthors.Select(ba => ba.Author.FullName).ToList()
+                }).ToList()
+            };
+        }
     }
 }

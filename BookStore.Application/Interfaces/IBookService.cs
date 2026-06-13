@@ -5,11 +5,9 @@ namespace BookStore.Application.Interfaces
     public interface IBookService
     {
         // Public
-        //Task<PagedResult<BookListItemDto>> GetAllAsync(BookFilterDto filter);
+        Task<PagedResult<BookListItemDto>> GetFilteredAsync(BookFilterDto filter);
 
-        //Task<BookDetailsDto?> GetBySlugAsync(string slug);
-
-        //Task<List<BookListItemDto>> GetByAuthorSlugAsync(string authorSlug);
+        Task<BookDetailsDto?> GetBySlugAsync(string slug);
 
         // Admin
         Task<List<BookListItemDto>> GetAllAsync();

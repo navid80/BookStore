@@ -1,0 +1,160 @@
+@model BookStore.Application.DTOs.BookDetailsDto
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row g-4">
+
+    <!-- ── Cover + Actions ── -->
+    <div class="col-md-3">
+        <div style="position:sticky; top:1rem;">
+            <div style="background:linear-gradient(135deg,#e8eef5,#d0dce8); border-radius:12px;
+                        height:300px; display:flex; align-items:center; justify-content:center;
+                        overflow:hidden; margin-bottom:1rem;">
+                @if (!string.IsNullOrEmpty(Model.CoverImagePath))
+                {
+                    <img src="@Model.CoverImagePath" alt="@Model.Title"
+                         style="width:100%; height:100%; object-fit:cover;" />
+                }
+                else
+                {
+                    <span style="font-size:5rem; opacity:.35">📖</span>
+                }
+            </div>
+
+            @if (Model.IsFree)
+            {
+                <a asp-controller="Books" asp-action="Download" asp-route-slug="@Model.Slug"
+                   class="btn btn-success w-100 mb-2">
+                    ⬇️ دانلود رایگان PDF
+                </a>
+            }
+            else
+            {
+                <button class="btn btn-secondary w-100 mb-2" disabled>
+                    🔒 نیاز به خرید
+                </button>
+            }
+
+            <a asp-controller="Books" asp-action="Index" class="btn btn-outline-secondary w-100 btn-sm">
+                ← بازگشت به لیست
+            </a>
+        </div>
+    </div>
+
+    <!-- ── Details ── -->
+    <div class="col-md-9">
+        <div style="background:#fff; border-radius:12px; border:1px solid #e2e8f0; padding:2rem;">
+
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb" style="font-size:.85rem;">
+                    <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Index">کتاب‌ها</a></li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Books" asp-action="Index" asp-route-CategorySlug="@Model.CategorySlug">
+                            @Model.CategoryName
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">@Model.Title</li>
+                </ol>
+            </nav>
+
+            <h1 style="font-size:1.6rem; font-weight:800; color:#1a202c; margin-bottom:.5rem;">
+                @Model.Title
+            </h1>
+
+            <!-- Authors -->
+            @if (Model.Authors.Any())
+            {
+                <div class="mb-3" style="font-size:.92rem; color:#4a5568;">
+                    ✍️
+                    @foreach (var author in Model.Authors)
+                    {
+                        <a asp-controller="Books" asp-action="Index" asp-route-AuthorSlug="@author.Slug"
+                           style="color:#2c5f8a; text-decoration:none; font-weight:600;">@author.FullName</a>
+                        @if (author != Model.Authors.Last()) { <span>، </span> }
+                    }
+                </div>
+            }
+
+            <!-- Meta badges -->
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <span class="badge bg-light text-dark border">🗂️ @Model.CategoryName</span>
+                <span class="badge bg-light text-dark border">📅 @Model.PublishedYear</span>
+                <span class="badge bg-light text-dark border">📄 @Model.PageCount صفحه</span>
+                <span class="badge bg-light text-dark border" style="font-family:monospace;">ISBN: @Model.ISBN</span>
+                @if (Model.IsFree)
+                {
+                    <span class="badge" style="background:#d1fae5; color:#065f46;">✅ رایگان</span>
+                }
+                else
+                {
+                    <span class="badge" style="background:#fef3c7; color:#92400e;">💰 غیررایگان</span>
+                }
+            </div>
+
+            <!-- Description -->
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <div class="mb-4">
+                    <h5 style="font-weight:700; margin-bottom:.75rem;">درباره کتاب</h5>
+                    <p style="line-height:2; color:#4a5568; text-align:justify;">@Model.Description</p>
+                </div>
+            }
+
+            <!-- Keywords -->
+            @if (Model.Keywords.Any())
+            {
+                <div class="mb-4">
+                    <h6 style="font-weight:700; margin-bottom:.5rem;">🏷️ کلیدواژه‌ها</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (var kw in Model.Keywords)
+                        {
+                            <a asp-controller="Books" asp-action="Index" asp-route-KeywordWord="@kw.Word"
+                               style="background:#eff6ff; color:#2c5f8a; padding:4px 12px; border-radius:20px;
+                                      font-size:.82rem; text-decoration:none; border:1px solid #bfdbfe;">
+                                @kw.Word
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Related Books -->
+        @if (Model.RelatedBooks.Any())
+        {
+            <div class="mt-4">
+                <div class="section-title">کتاب‌های مرتبط</div>
+                <div class="row g-3">
+                    @foreach (var related in Model.RelatedBooks)
+                    {
+                        <div class="col-sm-6 col-md-4 col-lg-3">
+                            <div class="book-card">
+                                <div class="cover-wrap" style="height:150px;">
+                                    @if (!string.IsNullOrEmpty(related.CoverImagePath))
+                                    {
+                                        <img src="@related.CoverImagePath" alt="@related.Title" />
+                                    }
+                                    else
+                                    {
+                                        <span class="cover-placeholder">📖</span>
+                                    }
+                                </div>
+                                <div class="card-body">
+                                    <div class="book-title" style="-webkit-line-clamp:1;">@related.Title</div>
+                                    <a asp-controller="Books" asp-action="Details"
+                                       asp-route-slug="@related.Slug"
+                                       class="btn btn-sm btn-outline-primary w-100 mt-2" style="font-size:.78rem;">
+                                        مشاهده
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
