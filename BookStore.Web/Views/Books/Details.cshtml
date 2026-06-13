@@ -25,16 +25,21 @@
 
             @if (Model.IsFree)
             {
-                <a asp-controller="Books" asp-action="Download" asp-route-slug="@Model.Slug"
-                   class="btn btn-success w-100 mb-2">
-                    ⬇️ دانلود رایگان PDF
-                </a>
-            }
-            else
-            {
-                <button class="btn btn-secondary w-100 mb-2" disabled>
-                    🔒 نیاز به خرید
-                </button>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Books" asp-action="Download" asp-route-slug="@Model.Slug"
+                       class="btn btn-success w-100 mb-2">
+                        ⬇️ دانلود PDF
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login"
+                       asp-route-returnUrl="@Url.Action("Download", "Books", new { slug = Model.Slug })"
+                       class="btn btn-outline-success w-100 mb-2">
+                        🔐 برای دانلود وارد شوید
+                    </a>
+                }
             }
 
             <a asp-controller="Books" asp-action="Index" class="btn btn-outline-secondary w-100 btn-sm">

@@ -244,6 +244,35 @@
                 </li>
             </ul>
 
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div class="d-flex align-items-center gap-2 me-2">
+                    <span style="color:rgba(255,255,255,.7); font-size:.85rem;">
+                        👤 @User.Identity.Name
+                    </span>
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm"
+                                style="background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.3);">
+                            خروج
+                        </button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex gap-2 me-2">
+                    <a asp-controller="Account" asp-action="Login"
+                       class="btn btn-sm" style="background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.3);">
+                        ورود
+                    </a>
+                    <a asp-controller="Account" asp-action="Register"
+                       class="btn btn-sm" style="background:#e8a020; color:#fff; border:none;">
+                        ثبت‌نام
+                    </a>
+                </div>
+            }
+
             <form class="search-form" asp-controller="Books" asp-action="Index" method="get">
                 <input type="text" name="SearchTerm" placeholder="جستجو در کتاب‌ها..."
                        value="@(ViewBag.Filter?.SearchTerm)" />

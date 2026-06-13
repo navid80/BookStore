@@ -1,5 +1,6 @@
 ﻿using BookStore.Application.DTOs;
 using BookStore.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Web.Controllers
@@ -42,6 +43,7 @@ namespace BookStore.Web.Controllers
             return View(book);
         }
 
+        [Authorize]
         public async Task<IActionResult> Download(string slug)
         {
             var book = await _bookService.GetBySlugAsync(slug);
