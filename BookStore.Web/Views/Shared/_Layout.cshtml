@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - کتابخانه دیجیتال</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
         :root {
             --primary: #2c5f8a;
@@ -231,7 +232,7 @@
 
 <nav class="navbar navbar-main navbar-expand-md">
     <div class="container">
-        <a class="navbar-brand" asp-controller="Home" asp-action="Index">📚 کتابخانه دیجیتال</a>
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index"><i class="fa-solid fa-book-open me-2"></i> کتابخانه دیجیتال</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
             <span class="navbar-toggler-icon"></span>
@@ -248,7 +249,7 @@
             {
                 <div class="d-flex align-items-center gap-2 me-2">
                     <span style="color:rgba(255,255,255,.7); font-size:.85rem;">
-                        👤 @User.Identity.Name
+                        <i class="fa-solid fa-circle-user me-1"></i> @User.Identity.Name
                     </span>
                     <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
                         @Html.AntiForgeryToken()
@@ -276,7 +277,7 @@
             <form class="search-form" asp-controller="Books" asp-action="Index" method="get">
                 <input type="text" name="SearchTerm" placeholder="جستجو در کتاب‌ها..."
                        value="@(ViewBag.Filter?.SearchTerm)" />
-                <button type="submit">🔍</button>
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
         </div>
     </div>
@@ -290,7 +291,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 mb-3">
-                <h6 class="text-white fw-bold">📚 کتابخانه دیجیتال</h6>
+                <h6 class="text-white fw-bold"><i class="fa-solid fa-book-open me-2"></i> کتابخانه دیجیتال</h6>
                 <p style="font-size:.85rem">دسترسی رایگان به صدها کتاب ارزشمند</p>
             </div>
             <div class="col-md-4 mb-3">

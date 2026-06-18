@@ -35,7 +35,7 @@
                 else
                 {
                     <a asp-controller="Account" asp-action="Login"
-                       asp-route-returnUrl="@Url.Action("Download", "Books", new { slug = Model.Slug })"
+                       asp-route-returnUrl="@Url.Action("Details", "Books", new { slug = Model.Slug })"
                        class="btn btn-outline-success w-100 mb-2">
                         🔐 برای دانلود وارد شوید
                     </a>

@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - پنل مدیریت</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
         body { background-color: #f4f6f9; }
         .sidebar {
@@ -65,28 +66,28 @@
             <!-- Sidebar -->
             <div class="col-md-2 sidebar">
                 <a class="sidebar-brand" asp-area="Admin" asp-controller="Categories" asp-action="Index">
-                    📚 BookStore Admin
+                    <i class="fa-solid fa-book-open-reader me-2"></i> BookStore Admin
                 </a>
                 <nav class="nav flex-column">
                     <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Categories" ? "active" : "")"
                        asp-area="Admin" asp-controller="Categories" asp-action="Index">
-                        🗂️ دسته‌بندی‌ها
+                        <i class="fa-solid fa-layer-group me-2"></i> دسته‌بندی‌ها
                     </a>
                     <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Author" ? "active" : "")"
                        asp-area="Admin" asp-controller="Author" asp-action="Index">
-                        ✍️ نویسندگان
+                        <i class="fa-solid fa-pen-nib me-2"></i> نویسندگان
                     </a>
                     <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Keyword" ? "active" : "")"
                        asp-area="Admin" asp-controller="Keyword" asp-action="Index">
-                        🏷️ کلیدواژه‌ها
+                        <i class="fa-solid fa-tags me-2"></i> کلیدواژه‌ها
                     </a>
                     <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Book" ? "active" : "")"
                        asp-area="Admin" asp-controller="Book" asp-action="Index">
-                        📖 کتاب‌ها
+                        <i class="fa-solid fa-book me-2"></i> کتاب‌ها
                     </a>
                     <hr style="border-color:#495057; margin: 10px 20px;" />
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        🏠 بازگشت به سایت
+                        <i class="fa-solid fa-house me-2"></i> بازگشت به سایت
                     </a>
                 </nav>
             </div>
