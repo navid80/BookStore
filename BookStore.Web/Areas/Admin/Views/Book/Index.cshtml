@@ -6,7 +6,7 @@
 }
 
 <div class="page-header">
-    <h4 class="mb-0">📚 مدیریت کتاب‌ها</h4>
+    <h4 class="mb-0"><i class="fa-solid fa-book me-2"></i> مدیریت کتاب‌ها</h4>
     <a asp-action="Create" class="btn btn-primary btn-sm">+ افزودن کتاب جدید</a>
 </div>
 
@@ -22,7 +22,7 @@
     @if (!Model.Any())
     {
         <div class="text-center py-5 text-muted">
-            <div style="font-size:3rem">📚</div>
+            <div style="font-size:3rem"><i class="fa-solid fa-book me-2"></i></div>
             <p class="mt-2">هیچ کتابی ثبت نشده است.</p>
             <a asp-action="Create" class="btn btn-outline-primary btn-sm">اولین کتاب را اضافه کنید</a>
         </div>
@@ -64,11 +64,13 @@
                             }
                         </td>
                         <td class="text-end">
-                            <a asp-action="Update" asp-route-id="@book.Id"
-                               class="btn btn-sm btn-outline-secondary me-1">ویرایش</a>
-                            <a asp-action="Delete" asp-route-id="@book.Id"
-                               class="btn btn-sm btn-outline-danger"
-                               onclick="return confirm('آیا از حذف این کتاب اطمینان دارید؟')">حذف</a>
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a asp-action="Update" asp-route-id="@book.Id"
+                                class="btn btn-sm btn-outline-secondary me-1"><i class="fa-solid fa-pen-to-square me-1"></i> ویرایش</a>
+                                <a asp-action="Delete" asp-route-id="@book.Id"
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('آیا از حذف این کتاب اطمینان دارید؟')"><i class="fa-solid fa-trash me-1"></i> حذف</a>
+                            </div>
                         </td>
                     </tr>
                 }

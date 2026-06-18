@@ -8,8 +8,14 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        body { background-color: #f4f6f9; }
+        body { 
+            height: 100%;
+            overflow: hidden;
+            background-color: #f4f6f9; 
+        }
         .sidebar {
+            height: 100vh;
+            overflow-y: auto;
             min-height: 100vh;
             background-color: #343a40;
             padding-top: 20px;
@@ -35,7 +41,11 @@
             border-bottom: 1px solid #495057;
             margin-bottom: 10px;
         }
-        .main-content { padding: 20px; }
+        .main-content { 
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+        }
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -62,7 +72,7 @@
 </head>
 <body>
     <div class="container-fluid p-0">
-        <div class="row g-0 vh-100">
+        <div class="row g-0">
             <!-- Sidebar -->
             <div class="col-md-2 sidebar">
                 <a class="sidebar-brand" asp-area="Admin" asp-controller="Categories" asp-action="Index">

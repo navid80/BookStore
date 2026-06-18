@@ -19,7 +19,9 @@
                 }
                 else
                 {
-                    <span style="font-size:5rem; opacity:.35">📖</span>
+                    <span class="cover-placeholder">
+                        <i class="fa-solid fa-book" style="font-size:5rem; opacity:.35;"></i>
+                    </span>
                 }
             </div>
 
@@ -29,7 +31,7 @@
                 {
                     <a asp-controller="Books" asp-action="Download" asp-route-slug="@Model.Slug"
                        class="btn btn-success w-100 mb-2">
-                        ⬇️ دانلود PDF
+                        <i class="fa-solid fa-download me-1"></i> دانلود PDF
                     </a>
                 }
                 else
@@ -37,13 +39,13 @@
                     <a asp-controller="Account" asp-action="Login"
                        asp-route-returnUrl="@Url.Action("Details", "Books", new { slug = Model.Slug })"
                        class="btn btn-outline-success w-100 mb-2">
-                        🔐 برای دانلود وارد شوید
+                        <i class="fa-solid fa-right-to-bracket me-1"></i> برای دانلود وارد شوید
                     </a>
                 }
             }
 
             <a asp-controller="Books" asp-action="Index" class="btn btn-outline-secondary w-100 btn-sm">
-                ← بازگشت به لیست
+                <i class="fa-solid fa-arrow-right me-1"></i> بازگشت به لیست
             </a>
         </div>
     </div>
@@ -73,7 +75,7 @@
             @if (Model.Authors.Any())
             {
                 <div class="mb-3" style="font-size:.92rem; color:#4a5568;">
-                    ✍️
+                    <i class="fa-solid fa-pen-nib me-1"></i>
                     @foreach (var author in Model.Authors)
                     {
                         <a asp-controller="Books" asp-action="Index" asp-route-AuthorSlug="@author.Slug"
@@ -85,17 +87,17 @@
 
             <!-- Meta badges -->
             <div class="d-flex flex-wrap gap-2 mb-4">
-                <span class="badge bg-light text-dark border">🗂️ @Model.CategoryName</span>
-                <span class="badge bg-light text-dark border">📅 @Model.PublishedYear</span>
-                <span class="badge bg-light text-dark border">📄 @Model.PageCount صفحه</span>
+                <span class="badge bg-light text-dark border"><i class="fa-solid fa-layer-group"></i> @Model.CategoryName</span>
+                <span class="badge bg-light text-dark border"><i class="fa-solid fa-calendar-days"></i> @Model.PublishedYear</span>
+                <span class="badge bg-light text-dark border"><i class="fa-solid fa-file-lines"></i> @Model.PageCount صفحه</span>
                 <span class="badge bg-light text-dark border" style="font-family:monospace;">ISBN: @Model.ISBN</span>
                 @if (Model.IsFree)
                 {
-                    <span class="badge" style="background:#d1fae5; color:#065f46;">✅ رایگان</span>
+                    <span class="badge" style="background:#d1fae5; color:#065f46;"><i class="fa-solid fa-circle-check me-1"></i> رایگان</span>
                 }
                 else
                 {
-                    <span class="badge" style="background:#fef3c7; color:#92400e;">💰 غیررایگان</span>
+                    <span class="badge" style="background:#fef3c7; color:#92400e;"><i class="fa-solid fa-money-bill-wave me-1"></i> غیررایگان</span>
                 }
             </div>
 
@@ -112,7 +114,7 @@
             @if (Model.Keywords.Any())
             {
                 <div class="mb-4">
-                    <h6 style="font-weight:700; margin-bottom:.5rem;">🏷️ کلیدواژه‌ها</h6>
+                    <h6 style="font-weight:700; margin-bottom:.5rem;"><i class="fa-solid fa-tags me-2"></i> کلیدواژه‌ها</h6>
                     <div class="d-flex flex-wrap gap-2">
                         @foreach (var kw in Model.Keywords)
                         {
@@ -144,7 +146,9 @@
                                     }
                                     else
                                     {
-                                        <span class="cover-placeholder">📖</span>
+                                        <span class="cover-placeholder">
+                                            <i class="fa-solid fa-book" style="font-size:5rem; opacity:.35;"></i>
+                                        </span>
                                     }
                                 </div>
                                 <div class="card-body">

@@ -40,11 +40,13 @@
                         <td><strong>@item.FullName</strong></td>
                         <td><span class="badge-slug">@item.Slug</span></td>
                         <td class="text-end">
-                            <a asp-action="Update" asp-route-id="@item.Id"
-                               class="btn btn-sm btn-outline-secondary me-1"><i class="fa-solid fa-pen-to-square me-1"></i> ویرایش</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id"
-                               class="btn btn-sm btn-outline-danger"
-                               onclick="return confirm('آیا از حذف این نویسنده اطمینان دارید؟')"><i class="fa-solid fa-trash me-1"></i> حذف</a>
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a asp-action="Update" asp-route-id="@item.Id"
+                                class="btn btn-sm btn-outline-secondary me-1"><i class="fa-solid fa-pen-to-square me-1"></i> ویرایش</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id"
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('آیا از حذف این نویسنده اطمینان دارید؟')"><i class="fa-solid fa-trash me-1"></i> حذف</a>
+                            </div>
                         </td>
                     </tr>
                 }
