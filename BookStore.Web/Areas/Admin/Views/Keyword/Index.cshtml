@@ -12,6 +12,16 @@
     </a>
 </div>
 
+<form asp-action="FilterKeywords" method="get">
+    <div class="search-bar my-3">
+        <div class="input-group input-group-sm" style="height: 40px">
+                <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input name="search" type="text" id="keywordSearchInput" class="form-control"
+                    placeholder="جستجوی کلیدواژه‌..." />
+        </div>
+    </div>
+</form>
+
 <div class="table-card">
     @if (!Model.Any())
     {

@@ -73,5 +73,15 @@ namespace BookStore.Web.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> FilterAuthors(string search)
+        {
+            if (string.IsNullOrWhiteSpace(search))
+                return RedirectToAction(nameof(Index));
+
+            var filteredAuthors = await _authorService.Filter(search);
+
+            return  View("Index", filteredAuthors);
+        }
     }
 }

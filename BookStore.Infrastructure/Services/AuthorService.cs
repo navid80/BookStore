@@ -41,6 +41,21 @@ namespace BookStore.Infrastructure.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<List<AuthorDetailsDto>> Filter(string search)
+        {
+            var filteredAuthors = await _dbContext.Authors
+                .Where(x => x.FullName.Contains(search))
+                .Select(x => new AuthorDetailsDto
+                {
+                    Id = x.Id,
+                    FullName = x.FullName,
+                    Slug = x.Slug
+                })
+                .ToListAsync();
+
+            return filteredAuthors;
+        }
+
         public async Task<List<AuthorDetailsDto>> GetAllAsync()
         {
             var authors = await _dbContext.Authors

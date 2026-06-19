@@ -101,5 +101,15 @@ namespace BookStore.Web.Areas.Admin.Controllers
             ViewBag.SelectedKeywordIds = selected?.KeywordIds ?? new List<int>();
             ViewBag.SelectedRelatedBookIds = selected?.RelatedBookIds ?? new List<int>();
         }
+
+        public async Task<IActionResult> FilterBooks(string search)
+        {
+            if (string.IsNullOrWhiteSpace(search))
+                return RedirectToAction(nameof(Index));
+
+            var filteredBooks = await _bookService.Filter(search);
+
+            return View("Index", filteredBooks);
+        }
     }
 }

@@ -19,5 +19,7 @@ namespace BookStore.Application.Interfaces
         Task UpdateAsync(UpdateBookDto dto);
 
         Task DeleteAsync(int id);
+
+        Task<List<BookListItemDto>> Filter(string search);
     }
 }

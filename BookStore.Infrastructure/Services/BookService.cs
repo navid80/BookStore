@@ -291,5 +291,30 @@ namespace BookStore.Infrastructure.Services
                 }).ToList()
             };
         }
+
+        public async Task<List<BookListItemDto>> Filter(string search)
+        {
+            var filteredBooks = await _dbContext.Books
+                .Where(x => x.Title.Contains(search))
+                .Include(b => b.Category)
+                .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
+                .OrderByDescending(b => b.CreatedAt)
+                .Select(b => new BookListItemDto
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Slug = b.Slug,
+                    CategoryName = b.Category.Name,
+                    CategorySlug = b.Category.Slug,
+                    PublishedYear = b.PublishedYear,
+                    PageCount = b.PageCount,
+                    IsFree = b.IsFree,
+                    CoverImagePath = b.CoverImagePath,
+                    AuthorNames = b.BookAuthors.Select(ba => ba.Author.FullName).ToList()
+                })
+                .ToListAsync() ?? new List<BookListItemDto>();
+
+            return filteredBooks;
+        }
     }
 }

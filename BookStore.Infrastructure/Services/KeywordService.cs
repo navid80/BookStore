@@ -39,6 +39,20 @@ namespace BookStore.Infrastructure.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<List<KeywordDetailsDto>> Filter(string search)
+        {
+            var filteredKeywords = await _dbContext.Keywords
+                .Where(x => x.Word.Contains(search))
+                .Select(x => new KeywordDetailsDto
+                {
+                    Id = x.Id,
+                    Word = x.Word
+                })
+                .ToListAsync();
+
+            return filteredKeywords;
+        }
+
         public async Task<List<KeywordDetailsDto>> GetAllAsync()
         {
             var keywords = await _dbContext.Keywords
